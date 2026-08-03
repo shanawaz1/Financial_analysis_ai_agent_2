@@ -13,19 +13,6 @@ def get_nlp():
 
 
 @lru_cache(maxsize=1)
-def get_asr():
-    from transformers import pipeline
-
-    return pipeline(
-        "automatic-speech-recognition",
-        model="openai/whisper-large-v3",
-        chunk_length_s=30,
-        stride_length_s=(5, 5),
-        device=-1,
-    )
-
-
-@lru_cache(maxsize=1)
 def get_summarizer():
     from transformers import pipeline
 

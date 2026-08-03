@@ -1,9 +1,11 @@
+import os
 from functools import lru_cache
 
 import numpy as np
+import requests
 
 from core.config import FLS_KEYWORDS
-from core.models import get_asr, get_fls_model, get_fin_model, get_nlp, get_summarizer
+from core.models import get_fls_model, get_fin_model, get_nlp, get_summarizer
 
 
 @lru_cache(maxsize=128)
@@ -20,11 +22,21 @@ def make_spans(text, results):
 def speech_to_text(audio_path):
     if audio_path is None:
         return "Please upload an audio file first."
+    api_key = os.getenv("GROQ_API_KEY")
+    if not api_key:
+        return "GROQ_API_KEY is not set. Add it in your environment variables."
     try:
-        result = get_asr()(audio_path, return_timestamps=True)
-        if "chunks" in result:
-            return " ".join(chunk["text"] for chunk in result["chunks"])
-        return result.get("text", "")
+        with open(audio_path, "rb") as f:
+            resp = requests.post(
+                "https://api.groq.com/openai/v1/audio/transcriptions",
+                headers={"Authorization": f"Bearer {api_key}"},
+                data={"model": "whisper-large-v3", "response_format": "json"},
+                files={"file": (os.path.basename(audio_path), f)},
+                timeout=120,
+            )
+        if resp.status_code != 200:
+            return f"Transcription error ({resp.status_code}): {resp.text[:300]}"
+        return resp.json().get("text", "")
     except Exception as e:
         return f"Error processing audio: {e}"
 
