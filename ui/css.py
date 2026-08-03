@@ -90,9 +90,9 @@ button:hover, .gr-button:hover {
 }
 #logo {
     position: absolute;
-    top: 24px;
+    top: 10px;
     right: 26px;
-    width: 72px;
+    width: 64px;
     height: auto;
     border-radius: 10px;
     border: 1px solid rgba(255, 255, 255, 0.15);
