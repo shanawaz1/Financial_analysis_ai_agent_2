@@ -1,12 +1,11 @@
 from functools import lru_cache
 
-import spacy
-import transformers
-from transformers import pipeline
-
 
 @lru_cache(maxsize=1)
 def get_nlp():
+    import spacy
+    import transformers
+
     transformers.logging.set_verbosity_error()
     nlp = spacy.load("en_core_web_sm")
     nlp.add_pipe("sentencizer")
@@ -15,6 +14,8 @@ def get_nlp():
 
 @lru_cache(maxsize=1)
 def get_asr():
+    from transformers import pipeline
+
     return pipeline(
         "automatic-speech-recognition",
         model="openai/whisper-large-v3",
@@ -26,11 +27,15 @@ def get_asr():
 
 @lru_cache(maxsize=1)
 def get_summarizer():
+    from transformers import pipeline
+
     return pipeline("summarization", model="knkarthick/MEETING_SUMMARY")
 
 
 @lru_cache(maxsize=1)
 def get_fin_model():
+    from transformers import pipeline
+
     return pipeline(
         "sentiment-analysis",
         model="yiyanghkust/finbert-tone",
@@ -40,6 +45,8 @@ def get_fin_model():
 
 @lru_cache(maxsize=1)
 def get_fls_model():
+    from transformers import pipeline
+
     return pipeline(
         "text-classification",
         model="yiyanghkust/finbert-fls",

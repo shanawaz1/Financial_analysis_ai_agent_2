@@ -3,10 +3,6 @@ import base64
 from functools import lru_cache
 
 import numpy as np
-import shap
-import matplotlib
-matplotlib.use("Agg")
-import matplotlib.pyplot as plt
 
 from core.analysis import keyword_boost
 from core.config import FINBERT_LABELS, FLS_LABELS
@@ -64,22 +60,32 @@ def fls_predict_scalar_boosted(texts):
     return np.array(boosted_scores)
 
 
-text_masker = shap.maskers.Text(" ")
+@lru_cache(maxsize=1)
+def _text_masker():
+    import shap
+
+    return shap.maskers.Text(" ")
 
 
 @lru_cache(maxsize=1)
 def get_finbert_explainer():
-    return shap.Explainer(finbert_predict, text_masker)
+    import shap
+
+    return shap.Explainer(finbert_predict, _text_masker())
 
 
 @lru_cache(maxsize=1)
 def get_fls_explainer():
-    return shap.Explainer(fls_predict, text_masker)
+    import shap
+
+    return shap.Explainer(fls_predict, _text_masker())
 
 
 @lru_cache(maxsize=1)
 def get_fls_boosted_explainer():
-    return shap.Explainer(fls_predict_scalar_boosted, text_masker)
+    import shap
+
+    return shap.Explainer(fls_predict_scalar_boosted, _text_masker())
 
 
 def _build_prob_table(labels, probs):
@@ -98,6 +104,8 @@ def _build_prob_table(labels, probs):
 
 def explain_finbert(text):
     try:
+        import shap
+
         shap_values = get_finbert_explainer()([text])
         html_plot = shap.plots.text(shap_values[0], display=False)
         probs = finbert_predict([text])[0]
@@ -109,6 +117,12 @@ def explain_finbert(text):
 
 def explain_fls_waterfall_plot(text):
     try:
+        import shap
+        import matplotlib
+
+        matplotlib.use("Agg")
+        import matplotlib.pyplot as plt
+
         shap_values = get_fls_boosted_explainer()([text])
         raw_probs = fls_predict([text])[0]
         boosted_probs = keyword_boost(text, raw_probs, mode="fls")
@@ -151,6 +165,11 @@ def _aggregate_shap_tokens(shap_values):
 
 def global_shap_summary(text_list):
     try:
+        import matplotlib
+
+        matplotlib.use("Agg")
+        import matplotlib.pyplot as plt
+
         clean_texts = [str(t) for t in text_list if isinstance(t, str) and len(t.strip()) > 0]
         if not clean_texts:
             return "No valid input texts provided."
@@ -180,6 +199,11 @@ def global_shap_summary(text_list):
 
 def global_fls_shap_summary(text_list):
     try:
+        import matplotlib
+
+        matplotlib.use("Agg")
+        import matplotlib.pyplot as plt
+
         clean_texts = [str(t) for t in text_list if isinstance(t, str) and len(t.strip()) > 0]
         if not clean_texts:
             return "No valid input texts provided."
