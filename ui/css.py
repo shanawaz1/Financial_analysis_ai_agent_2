@@ -88,16 +88,31 @@ button:hover, .gr-button:hover {
 .gradio-container .gr-textbox {
     border-color: #2c4a6e !important;
 }
-#logo {
-    position: absolute;
-    top: 10px;
-    right: 26px;
-    width: 64px;
+.app-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    margin-bottom: 8px;
+}
+.app-header h1 {
+    margin: 0;
+    font-size: 28px;
+    font-weight: 700;
+    color: #ffffff !important;
+}
+.app-header .tagline {
+    margin: 6px 0 0;
+    color: #9db8d6 !important;
+    font-size: 14px;
+}
+.logo {
+    width: 72px;
     height: auto;
-    border-radius: 10px;
-    border: 1px solid rgba(255, 255, 255, 0.15);
-    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3);
-    z-index: 1000;
+    flex-shrink: 0;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
 }
 footer, .gradio-container footer {
     color: #5b7696 !important;

@@ -15,12 +15,17 @@ def build_app():
     demo = gr.Blocks()
     with demo:
         gr.HTML(CUSTOM_CSS)
-        gr.Image(
-            "https://lh3.googleusercontent.com/pw/AP1GczMzUegdq6DGcyV69iCQ9SqCFfTiS6t8MwMxQNdJP2pwtXEX4KLpMJhIGjVgdoHs9vezs8eA-MWs7GBZsRqzrIVdH0fIrcMHiWiKl3L3O0yt7mShvQ=w2400",
-            elem_id="logo",
+        gr.HTML(
+            """
+            <div class="app-header">
+                <div class="app-header-text">
+                    <h1>Financial Analyst AI</h1>
+                    <p class="tagline">This project applies AI trained to analyze earning calls and financial documents.</p>
+                </div>
+                <img class="logo" src="https://lh3.googleusercontent.com/pw/AP1GczMzUegdq6DGcyV69iCQ9SqCFfTiS6t8MwMxQNdJP2pwtXEX4KLpMJhIGjVgdoHs9vezs8eA-MWs7GBZsRqzrIVdH0fIrcMHiWiKl3L3O0yt7mShvQ=w2400" alt="Financial Analyst AI logo"/>
+            </div>
+            """
         )
-        gr.Markdown("## Financial Analyst AI")
-        gr.Markdown("This project applies AI trained to analyze earning calls and financial documents.")
 
         with gr.Tabs():
             with gr.TabItem("Speech Recognition"):
